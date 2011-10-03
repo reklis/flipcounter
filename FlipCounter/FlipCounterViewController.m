@@ -7,6 +7,7 @@
 //
 
 #import "FlipCounterViewController.h"
+#import "FlipCounterView.h"
 
 @implementation FlipCounterViewController
 
@@ -20,13 +21,15 @@
 
 #pragma mark - View lifecycle
 
-/*
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    FlipCounterView* flipCounter = [[FlipCounterView alloc] initWithFrame:self.view.frame];
+    [self.view addSubview:flipCounter];
+    [flipCounter release];
 }
-*/
 
 - (void)viewDidUnload
 {

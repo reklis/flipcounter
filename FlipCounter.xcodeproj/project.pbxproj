@@ -16,6 +16,8 @@
 		3B39DA7E143A22BA0059BAC6 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3B39DA7C143A22BA0059BAC6 /* MainWindow.xib */; };
 		3B39DA81143A22BB0059BAC6 /* FlipCounterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B39DA80143A22BB0059BAC6 /* FlipCounterViewController.m */; };
 		3B39DA84143A22BB0059BAC6 /* FlipCounterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3B39DA82143A22BB0059BAC6 /* FlipCounterViewController.xib */; };
+		3B39DA8E143A32B20059BAC6 /* FlipCounterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B39DA8D143A32B20059BAC6 /* FlipCounterView.m */; };
+		3B39DA90143A34450059BAC6 /* digits.png in Resources */ = {isa = PBXBuildFile; fileRef = 3B39DA8F143A34450059BAC6 /* digits.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,16 +25,19 @@
 		3B39DA6A143A22BA0059BAC6 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		3B39DA6C143A22BA0059BAC6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		3B39DA6E143A22BA0059BAC6 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		3B39DA72143A22BA0059BAC6 /* FlipCounter-Info.plist */ = {isa = PBXFileReference; path = "FlipCounter-Info.plist"; sourceTree = "<group>"; };
+		3B39DA72143A22BA0059BAC6 /* FlipCounter-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "FlipCounter-Info.plist"; sourceTree = "<group>"; };
 		3B39DA74143A22BA0059BAC6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		3B39DA76143A22BA0059BAC6 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		3B39DA78143A22BA0059BAC6 /* FlipCounter-Prefix.pch */ = {isa = PBXFileReference; path = "FlipCounter-Prefix.pch"; sourceTree = "<group>"; };
-		3B39DA79143A22BA0059BAC6 /* FlipCounterAppDelegate.h */ = {isa = PBXFileReference; path = FlipCounterAppDelegate.h; sourceTree = "<group>"; };
+		3B39DA78143A22BA0059BAC6 /* FlipCounter-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FlipCounter-Prefix.pch"; sourceTree = "<group>"; };
+		3B39DA79143A22BA0059BAC6 /* FlipCounterAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FlipCounterAppDelegate.h; sourceTree = "<group>"; };
 		3B39DA7A143A22BA0059BAC6 /* FlipCounterAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FlipCounterAppDelegate.m; sourceTree = "<group>"; };
 		3B39DA7D143A22BA0059BAC6 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
-		3B39DA7F143A22BB0059BAC6 /* FlipCounterViewController.h */ = {isa = PBXFileReference; path = FlipCounterViewController.h; sourceTree = "<group>"; };
+		3B39DA7F143A22BB0059BAC6 /* FlipCounterViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FlipCounterViewController.h; sourceTree = "<group>"; };
 		3B39DA80143A22BB0059BAC6 /* FlipCounterViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FlipCounterViewController.m; sourceTree = "<group>"; };
 		3B39DA83143A22BB0059BAC6 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/FlipCounterViewController.xib; sourceTree = "<group>"; };
+		3B39DA8C143A32B20059BAC6 /* FlipCounterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlipCounterView.h; sourceTree = "<group>"; };
+		3B39DA8D143A32B20059BAC6 /* FlipCounterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlipCounterView.m; sourceTree = "<group>"; };
+		3B39DA8F143A34450059BAC6 /* digits.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = digits.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +84,7 @@
 		3B39DA70143A22BA0059BAC6 /* FlipCounter */ = {
 			isa = PBXGroup;
 			children = (
+				3B39DA8F143A34450059BAC6 /* digits.png */,
 				3B39DA79143A22BA0059BAC6 /* FlipCounterAppDelegate.h */,
 				3B39DA7A143A22BA0059BAC6 /* FlipCounterAppDelegate.m */,
 				3B39DA7C143A22BA0059BAC6 /* MainWindow.xib */,
@@ -86,6 +92,8 @@
 				3B39DA80143A22BB0059BAC6 /* FlipCounterViewController.m */,
 				3B39DA82143A22BB0059BAC6 /* FlipCounterViewController.xib */,
 				3B39DA71143A22BA0059BAC6 /* Supporting Files */,
+				3B39DA8C143A32B20059BAC6 /* FlipCounterView.h */,
+				3B39DA8D143A32B20059BAC6 /* FlipCounterView.m */,
 			);
 			path = FlipCounter;
 			sourceTree = "<group>";
@@ -151,6 +159,7 @@
 				3B39DA75143A22BA0059BAC6 /* InfoPlist.strings in Resources */,
 				3B39DA7E143A22BA0059BAC6 /* MainWindow.xib in Resources */,
 				3B39DA84143A22BB0059BAC6 /* FlipCounterViewController.xib in Resources */,
+				3B39DA90143A34450059BAC6 /* digits.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -164,6 +173,7 @@
 				3B39DA77143A22BA0059BAC6 /* main.m in Sources */,
 				3B39DA7B143A22BA0059BAC6 /* FlipCounterAppDelegate.m in Sources */,
 				3B39DA81143A22BB0059BAC6 /* FlipCounterViewController.m in Sources */,
+				3B39DA8E143A32B20059BAC6 /* FlipCounterView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
