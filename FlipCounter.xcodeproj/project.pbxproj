@@ -1,0 +1,288 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		3B39DA6B143A22BA0059BAC6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B39DA6A143A22BA0059BAC6 /* UIKit.framework */; };
+		3B39DA6D143A22BA0059BAC6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B39DA6C143A22BA0059BAC6 /* Foundation.framework */; };
+		3B39DA6F143A22BA0059BAC6 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B39DA6E143A22BA0059BAC6 /* CoreGraphics.framework */; };
+		3B39DA75143A22BA0059BAC6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3B39DA73143A22BA0059BAC6 /* InfoPlist.strings */; };
+		3B39DA77143A22BA0059BAC6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B39DA76143A22BA0059BAC6 /* main.m */; };
+		3B39DA7B143A22BA0059BAC6 /* FlipCounterAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B39DA7A143A22BA0059BAC6 /* FlipCounterAppDelegate.m */; };
+		3B39DA7E143A22BA0059BAC6 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3B39DA7C143A22BA0059BAC6 /* MainWindow.xib */; };
+		3B39DA81143A22BB0059BAC6 /* FlipCounterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B39DA80143A22BB0059BAC6 /* FlipCounterViewController.m */; };
+		3B39DA84143A22BB0059BAC6 /* FlipCounterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3B39DA82143A22BB0059BAC6 /* FlipCounterViewController.xib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		3B39DA66143A22BA0059BAC6 /* FlipCounter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FlipCounter.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3B39DA6A143A22BA0059BAC6 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		3B39DA6C143A22BA0059BAC6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		3B39DA6E143A22BA0059BAC6 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		3B39DA72143A22BA0059BAC6 /* FlipCounter-Info.plist */ = {isa = PBXFileReference; path = "FlipCounter-Info.plist"; sourceTree = "<group>"; };
+		3B39DA74143A22BA0059BAC6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		3B39DA76143A22BA0059BAC6 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		3B39DA78143A22BA0059BAC6 /* FlipCounter-Prefix.pch */ = {isa = PBXFileReference; path = "FlipCounter-Prefix.pch"; sourceTree = "<group>"; };
+		3B39DA79143A22BA0059BAC6 /* FlipCounterAppDelegate.h */ = {isa = PBXFileReference; path = FlipCounterAppDelegate.h; sourceTree = "<group>"; };
+		3B39DA7A143A22BA0059BAC6 /* FlipCounterAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FlipCounterAppDelegate.m; sourceTree = "<group>"; };
+		3B39DA7D143A22BA0059BAC6 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
+		3B39DA7F143A22BB0059BAC6 /* FlipCounterViewController.h */ = {isa = PBXFileReference; path = FlipCounterViewController.h; sourceTree = "<group>"; };
+		3B39DA80143A22BB0059BAC6 /* FlipCounterViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FlipCounterViewController.m; sourceTree = "<group>"; };
+		3B39DA83143A22BB0059BAC6 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/FlipCounterViewController.xib; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		3B39DA63143A22BA0059BAC6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3B39DA6B143A22BA0059BAC6 /* UIKit.framework in Frameworks */,
+				3B39DA6D143A22BA0059BAC6 /* Foundation.framework in Frameworks */,
+				3B39DA6F143A22BA0059BAC6 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		3B39DA5B143A22BA0059BAC6 = {
+			isa = PBXGroup;
+			children = (
+				3B39DA70143A22BA0059BAC6 /* FlipCounter */,
+				3B39DA69143A22BA0059BAC6 /* Frameworks */,
+				3B39DA67143A22BA0059BAC6 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		3B39DA67143A22BA0059BAC6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3B39DA66143A22BA0059BAC6 /* FlipCounter.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		3B39DA69143A22BA0059BAC6 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3B39DA6A143A22BA0059BAC6 /* UIKit.framework */,
+				3B39DA6C143A22BA0059BAC6 /* Foundation.framework */,
+				3B39DA6E143A22BA0059BAC6 /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		3B39DA70143A22BA0059BAC6 /* FlipCounter */ = {
+			isa = PBXGroup;
+			children = (
+				3B39DA79143A22BA0059BAC6 /* FlipCounterAppDelegate.h */,
+				3B39DA7A143A22BA0059BAC6 /* FlipCounterAppDelegate.m */,
+				3B39DA7C143A22BA0059BAC6 /* MainWindow.xib */,
+				3B39DA7F143A22BB0059BAC6 /* FlipCounterViewController.h */,
+				3B39DA80143A22BB0059BAC6 /* FlipCounterViewController.m */,
+				3B39DA82143A22BB0059BAC6 /* FlipCounterViewController.xib */,
+				3B39DA71143A22BA0059BAC6 /* Supporting Files */,
+			);
+			path = FlipCounter;
+			sourceTree = "<group>";
+		};
+		3B39DA71143A22BA0059BAC6 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				3B39DA72143A22BA0059BAC6 /* FlipCounter-Info.plist */,
+				3B39DA73143A22BA0059BAC6 /* InfoPlist.strings */,
+				3B39DA76143A22BA0059BAC6 /* main.m */,
+				3B39DA78143A22BA0059BAC6 /* FlipCounter-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		3B39DA65143A22BA0059BAC6 /* FlipCounter */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3B39DA87143A22BB0059BAC6 /* Build configuration list for PBXNativeTarget "FlipCounter" */;
+			buildPhases = (
+				3B39DA62143A22BA0059BAC6 /* Sources */,
+				3B39DA63143A22BA0059BAC6 /* Frameworks */,
+				3B39DA64143A22BA0059BAC6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FlipCounter;
+			productName = FlipCounter;
+			productReference = 3B39DA66143A22BA0059BAC6 /* FlipCounter.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		3B39DA5D143A22BA0059BAC6 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 3B39DA60143A22BA0059BAC6 /* Build configuration list for PBXProject "FlipCounter" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 3B39DA5B143A22BA0059BAC6;
+			productRefGroup = 3B39DA67143A22BA0059BAC6 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				3B39DA65143A22BA0059BAC6 /* FlipCounter */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		3B39DA64143A22BA0059BAC6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3B39DA75143A22BA0059BAC6 /* InfoPlist.strings in Resources */,
+				3B39DA7E143A22BA0059BAC6 /* MainWindow.xib in Resources */,
+				3B39DA84143A22BB0059BAC6 /* FlipCounterViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		3B39DA62143A22BA0059BAC6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3B39DA77143A22BA0059BAC6 /* main.m in Sources */,
+				3B39DA7B143A22BA0059BAC6 /* FlipCounterAppDelegate.m in Sources */,
+				3B39DA81143A22BB0059BAC6 /* FlipCounterViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		3B39DA73143A22BA0059BAC6 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3B39DA74143A22BA0059BAC6 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		3B39DA7C143A22BA0059BAC6 /* MainWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3B39DA7D143A22BA0059BAC6 /* en */,
+			);
+			name = MainWindow.xib;
+			sourceTree = "<group>";
+		};
+		3B39DA82143A22BB0059BAC6 /* FlipCounterViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3B39DA83143A22BB0059BAC6 /* en */,
+			);
+			name = FlipCounterViewController.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		3B39DA85143A22BB0059BAC6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		3B39DA86143A22BB0059BAC6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		3B39DA88143A22BB0059BAC6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "FlipCounter/FlipCounter-Prefix.pch";
+				INFOPLIST_FILE = "FlipCounter/FlipCounter-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		3B39DA89143A22BB0059BAC6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "FlipCounter/FlipCounter-Prefix.pch";
+				INFOPLIST_FILE = "FlipCounter/FlipCounter-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		3B39DA60143A22BA0059BAC6 /* Build configuration list for PBXProject "FlipCounter" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3B39DA85143A22BB0059BAC6 /* Debug */,
+				3B39DA86143A22BB0059BAC6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3B39DA87143A22BB0059BAC6 /* Build configuration list for PBXNativeTarget "FlipCounter" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3B39DA88143A22BB0059BAC6 /* Debug */,
+				3B39DA89143A22BB0059BAC6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 3B39DA5D143A22BA0059BAC6 /* Project object */;
+}
