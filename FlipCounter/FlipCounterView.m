@@ -32,11 +32,11 @@
         
         numTopFrames = 3;
         int totalNumTopFrames = numTopFrames * 10;
-        topFrames = [NSMutableArray arrayWithCapacity:totalNumTopFrames];
+        topFrames = [[NSMutableArray alloc] initWithCapacity:totalNumTopFrames];
         
         numBottomFrames = 4;
         int totalNumBottomFrames = numBottomFrames * 10;
-        bottomFrames = [NSMutableArray arrayWithCapacity:totalNumBottomFrames];
+        bottomFrames = [[NSMutableArray alloc] initWithCapacity:totalNumBottomFrames];
         
         int bottomRowStart = 10;
         for (int row=0; row!=numRows; ++row) {
@@ -65,6 +65,12 @@
             
             y += h;
         }
+        
+        digitFrame.topIndex = 0;
+        digitFrame.bottomIndex = 0;
+        
+        o = 0;
+        n = 0;
     }
     return self;
 }
@@ -74,13 +80,50 @@
 // An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect
 {
-    UIImage* t = [topFrames objectAtIndex:0];
+    UIImage* t = [topFrames objectAtIndex:digitFrame.topIndex];
     [t drawAtPoint:CGPointZero];
     
-    UIImage* b = [bottomFrames objectAtIndex:0];
+    UIImage* b = [bottomFrames objectAtIndex:digitFrame.bottomIndex];
     [b drawAtPoint:CGPointMake(0, FCV_TOPFRAME_HEIGHT)];
 }
 
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    NSTimeInterval frameRate = .05;
+    
+    // top pattern: old 1, old 2, new 0
+    // bottom pattern: old 1, new 2, new 3, new 0
+    
+    digitFrame.topIndex = (o * numTopFrames) + 1;
+    [self setNeedsDisplay];
+    [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:frameRate]];
 
+    digitFrame.topIndex = (o * numTopFrames) + 2;
+    [self setNeedsDisplay];
+    [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:frameRate]];
+
+    digitFrame.topIndex = (n * numTopFrames) + 0;
+    digitFrame.bottomIndex = (o * numBottomFrames) + 1;
+    [self setNeedsDisplay];
+    [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:frameRate]];
+    
+    digitFrame.bottomIndex = (n * numBottomFrames) + 2;
+    [self setNeedsDisplay];
+    [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:frameRate]];
+    
+    digitFrame.bottomIndex = (n * numBottomFrames) + 3;
+    [self setNeedsDisplay];
+    [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:frameRate]];
+    
+    digitFrame.bottomIndex = (n * numBottomFrames) + 0;
+    [self setNeedsDisplay];
+    
+    o = n;
+    ++n;
+    
+    if (n >= 10) {
+        n=0;
+    }
+}
 
 @end

@@ -8,6 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
+typedef struct FlipCounterViewDigitFrame {
+    NSUInteger topIndex;
+    NSUInteger bottomIndex;
+} FlipCounterViewDigitFrame;
+
 @interface FlipCounterView : UIView
 {
     @private
@@ -15,6 +20,10 @@
     NSMutableArray* bottomFrames;
     int numTopFrames;
     int numBottomFrames;
+    
+    int o;
+    int n;
+    FlipCounterViewDigitFrame digitFrame;
 }
 
 @end
