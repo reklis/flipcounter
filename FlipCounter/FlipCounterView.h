@@ -13,6 +13,12 @@ typedef struct FlipCounterViewDigitFrame {
     NSUInteger bottomIndex;
 } FlipCounterViewDigitFrame;
 
+typedef struct FlipCounterViewDigitIndex {
+    NSUInteger oldValue;
+    NSUInteger newValue;
+    FlipCounterViewDigitFrame currentFrame;
+} FlipCounterViewDigitIndex;
+
 @interface FlipCounterView : UIView
 {
     @private
@@ -21,9 +27,7 @@ typedef struct FlipCounterViewDigitFrame {
     int numTopFrames;
     int numBottomFrames;
     
-    int o;
-    int n;
-    FlipCounterViewDigitFrame digitFrame;
+    FlipCounterViewDigitIndex digitIndex;
     
     BOOL isAnimating;
 }
