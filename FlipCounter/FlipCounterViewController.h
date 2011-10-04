@@ -8,6 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+#import "FlipCounterView.h"
+
 @interface FlipCounterViewController : UIViewController
+{
+    @private
+    FlipCounterView* flipCounter;
+}
 
 @end

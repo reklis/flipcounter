@@ -24,6 +24,10 @@ typedef struct FlipCounterViewDigitFrame {
     int o;
     int n;
     FlipCounterViewDigitFrame digitFrame;
+    
+    BOOL isAnimating;
 }
+
+- (void) add:(NSUInteger)incr;
 
 @end

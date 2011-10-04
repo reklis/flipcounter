@@ -7,7 +7,6 @@
 //
 
 #import "FlipCounterViewController.h"
-#import "FlipCounterView.h"
 
 @implementation FlipCounterViewController
 
@@ -26,7 +25,7 @@
 {
     [super viewDidLoad];
     
-    FlipCounterView* flipCounter = [[FlipCounterView alloc] initWithFrame:self.view.frame];
+    flipCounter = [[FlipCounterView alloc] initWithFrame:self.view.frame];
     [self.view addSubview:flipCounter];
     [flipCounter release];
 }
@@ -42,6 +41,16 @@
 {
     // Return YES for supported orientations
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [flipCounter add:[touches count]];
+}
+
+- (void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [flipCounter add:[touches count]];
 }
 
 @end
