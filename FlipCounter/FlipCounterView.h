@@ -22,6 +22,7 @@
     
     NSMutableArray* digits;
     
+    BOOL changedWhileAnimating;
     BOOL isAnimating;
     int numDigitsToDraw;
 }

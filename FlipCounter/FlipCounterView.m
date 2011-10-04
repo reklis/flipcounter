@@ -154,19 +154,20 @@
 - (void) animate
 {
     if (isAnimating) {
+        changedWhileAnimating = YES;
         return;
     }
     
     isAnimating = YES;
     numDigitsToDraw = [digits count];
     NSArray* sprites = [digits copy];
-    
+    NSTimeInterval frameRate = .05;
+
     for (FlipCounterViewDigitSprite* sprite in sprites) {
         int from = sprite.oldValue;
         int to = sprite.newValue;
         if (from == to) continue; // skip sprites that have not changed
         
-        NSTimeInterval frameRate = .05;
         BOOL spriteAnimationComplete = FALSE;
         while (!spriteAnimationComplete) {
             spriteAnimationComplete = [sprite nextFrame:from
@@ -179,13 +180,13 @@
         }
         
         sprite.oldValue = to;
-        
-        if (sprite.newValue != to) {
-            [self animate];
-        }
     }
     
     isAnimating = NO;
+    while (changedWhileAnimating) {
+        changedWhileAnimating = NO;
+        [self animate];
+    }
 }
 
 @end
