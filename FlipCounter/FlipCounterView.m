@@ -13,7 +13,7 @@
 @interface FlipCounterView(Private)
 
 - (void) loadImagePool;
-- (void) carry:(float)overage base:(int)base;
+- (void) carry:(int)overage base:(int)base;
 - (void) animate;
 
 @end
@@ -26,6 +26,8 @@
     if (self) {
         [self setBackgroundColor:[UIColor clearColor]];
         [self loadImagePool];
+        
+        rawCounterValue = 0;
         
         digits = [[NSMutableArray alloc] initWithCapacity:10];
         FlipCounterViewDigitSprite* sprite = [[[FlipCounterViewDigitSprite alloc] initWithOldValue:0 newValue:0 frameTop:0 frameBottom:0] autorelease];
@@ -112,7 +114,7 @@
     }
 }
 
-- (void) carry:(float)overhang base:(int)base
+- (void) carry:(int)overhang base:(int)base
 {
     FlipCounterViewDigitSprite* sprite = nil;
     
@@ -128,22 +130,36 @@
         [sprite release];
     }
     
-    float o = [sprite incr:overhang/10.];
+    int o = [sprite incr:overhang];
     
     if (o != 0) {
-        [self carry:o base:base+1];
+        [self carry:o base:digitIndex];
     }
 }
 
-- (void) add:(float)i
+- (void) add:(int)i
 {
+//    int oldRawCounterValue = rawCounterValue;
+    
+    rawCounterValue += i;
+    
     FlipCounterViewDigitSprite* digitIndex = [digits objectAtIndex:0];
     
-    float overhang = [digitIndex incr:i];
+    int overhang = [digitIndex incr:i];
     
     if (overhang != 0) {
         [self carry:overhang base:0];
     }
+    
+//    int testValue = 0;
+//    for (int i=0; i!=[digits count]; ++i) {
+//        FlipCounterViewDigitSprite* sprite = [digits objectAtIndex:i];
+//        testValue += sprite.newValue * powf(10, i);
+//    }
+//    
+//    NSLog(@"((%d+%d) = %d) == %d ?", oldRawCounterValue, i, rawCounterValue, testValue);
+//    
+//    NSAssert(testValue == rawCounterValue, @"math error");
     
     [self animate];
 }
@@ -185,6 +201,7 @@
         changedWhileAnimating = NO;
         [self animate];
     }
+    [self setNeedsDisplay];
 }
 
 @end
@@ -216,18 +233,15 @@
     return [NSString stringWithFormat:@"(o:%d n:%d t:%d b:%d)", _oldValue, _newValue, _topIndex, _bottomIndex];
 }
 
-- (float) incr:(float)inc
+- (int) incr:(int)inc
 {
-    float i1 = 0;
-    float f1 = modff(inc/10., &i1);
+    if (0 == inc) return 0;
     
-    float overhang = i1;
-    float v = _newValue + floorf(f1 * 10.);
+    int overhang = inc / 10;
+    int v = _newValue + (inc % 10);
     if (v > 9) {
-        float i2 = 0;
-        float f2 = modff(v, &i2);
-        overhang += i2;
-        v = floorf(f2 * 10.);
+        overhang += v / 10;
+        v %= 10;
     }
     
     _newValue = v;

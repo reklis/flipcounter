@@ -22,9 +22,11 @@
     BOOL changedWhileAnimating;
     BOOL isAnimating;
     int numDigitsToDraw;
+    
+    int rawCounterValue;
 }
 
-- (void) add:(float)incr;
+- (void) add:(int)incr;
 
 @end
 
@@ -46,7 +48,7 @@
 @property (readwrite,nonatomic,assign) NSUInteger oldValue;
 @property (readwrite,nonatomic,assign) NSUInteger newValue;
 
-- (float) incr:(float)inc;
+- (int) incr:(int)inc;
 
 - (BOOL) nextFrame:(int)from
                 to:(int)to
