@@ -33,6 +33,8 @@
         digits = [[NSMutableArray alloc] initWithCapacity:10];
         FlipCounterViewDigitSprite* sprite = [[[FlipCounterViewDigitSprite alloc] initWithOldValue:0 newValue:0 frameTop:0 frameBottom:0] autorelease];
         [digits addObject:sprite];
+        
+        [self animate];
     }
     return self;
 }
@@ -100,20 +102,26 @@
 // An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect
 {
-    FlipCounterViewDigitSprite* digitIndex = [digits objectAtIndex:0];
-    UIImage* t = [topFrames objectAtIndex:digitIndex.topIndex];
-    [t drawAtPoint:CGPointZero];
-    
-    UIImage* b = [bottomFrames objectAtIndex:digitIndex.bottomIndex];
-    [b drawAtPoint:CGPointMake(0, FCV_TOPFRAME_HEIGHT)];
+    for (int i=numDigitsToDraw-1; i!=-1; --i) {
+        FlipCounterViewDigitSprite* sprite = [digits objectAtIndex:i];
+        
+        CGFloat x = FCV_FRAME_WIDTH * (numDigitsToDraw - i);
+        
+        UIImage* t = [topFrames objectAtIndex:sprite.topIndex];
+        [t drawAtPoint:CGPointMake(x, 0)];
+        
+        UIImage* b = [bottomFrames objectAtIndex:sprite.bottomIndex];
+        [b drawAtPoint:CGPointMake(x, FCV_TOPFRAME_HEIGHT)];
+    }
 }
 
 - (void) carry:(float)overhang base:(int)base
 {
     FlipCounterViewDigitSprite* sprite = nil;
     
-    if ([digits count] <= base) {
-        sprite = [digits objectAtIndex:base];
+    NSUInteger digitIndex = base + 1;
+    if ([digits count] > digitIndex) {
+        sprite = [digits objectAtIndex:digitIndex];
     } else {
         sprite = [[FlipCounterViewDigitSprite alloc] initWithOldValue:0
                                                              newValue:0
@@ -123,7 +131,7 @@
         [sprite release];
     }
     
-    float o = [sprite incr:overhang];
+    float o = [sprite incr:overhang/10.];
     
     if (o != 0) {
         [self carry:o base:base+1];
@@ -150,6 +158,7 @@
     }
     
     isAnimating = YES;
+    numDigitsToDraw = [digits count];
     
     FlipCounterViewDigitSprite* sprite = [digits objectAtIndex:0];
     int from = sprite.oldValue;
@@ -157,32 +166,12 @@
     
     NSTimeInterval frameRate = .05;
 
-    // top pattern: old 1, old 2, new 0
-    // bottom pattern: old 1, new 2, new 3, new 0
-    
-    sprite.topIndex = (from * numTopFrames) + 1;
-    [self setNeedsDisplay];
-    [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:frameRate]];
-    
-    sprite.topIndex = (from * numTopFrames) + 2;
-    [self setNeedsDisplay];
-    [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:frameRate]];
-    
-    sprite.topIndex = (to * numTopFrames) + 0;
-    sprite.bottomIndex = (from * numBottomFrames) + 1;
-    [self setNeedsDisplay];
-    [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:frameRate]];
-    
-    sprite.bottomIndex = (to * numBottomFrames) + 2;
-    [self setNeedsDisplay];
-    [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:frameRate]];
-    
-    sprite.bottomIndex = (to * numBottomFrames) + 3;
-    [self setNeedsDisplay];
-    [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:frameRate]];
-    
-    sprite.bottomIndex = (to * numBottomFrames) + 0;
-    [self setNeedsDisplay];
+    BOOL spriteAnimationComplete = FALSE;
+    while (!spriteAnimationComplete) {
+        spriteAnimationComplete = [sprite nextFrame:from to:to numTopFrames:numTopFrames numBottomFrames:numBottomFrames];
+        [self setNeedsDisplay];
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:frameRate]];
+    }
     
     sprite.oldValue = to;
     isAnimating = NO;
@@ -237,6 +226,47 @@
     
     _newValue = v;
     return overhang;
+}
+
+- (BOOL) nextFrame:(int)from
+                to:(int)to
+      numTopFrames:(int)numTopFrames
+   numBottomFrames:(int)numBottomFrames
+{
+    ++currentFrame;
+    if (currentFrame > 5) {
+        currentFrame = 0;
+    }
+    
+    // top pattern: old 1, old 2, new 0
+    // bottom pattern: old 1, new 2, new 3, new 0
+    
+    switch (currentFrame) {
+        case 0:
+            _topIndex = (from * numTopFrames) + 1;
+            break;
+        case 1:
+            _topIndex = (from * numTopFrames) + 2;
+            break;
+        case 2:
+            _topIndex = (to * numTopFrames) + 0;
+            _bottomIndex = (from * numBottomFrames) + 1;
+            break;
+        case 3:
+            _bottomIndex = (to * numBottomFrames) + 2;
+            break;
+        case 4:
+            _bottomIndex = (to * numBottomFrames) + 3;
+            break;
+        case 5:
+            _bottomIndex = (to * numBottomFrames) + 0;
+            break;
+            
+        default:
+            break;
+    }
+    
+    return (currentFrame == 5);
 }
 
 @end

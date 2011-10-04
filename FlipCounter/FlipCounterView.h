@@ -23,6 +23,7 @@
     NSMutableArray* digits;
     
     BOOL isAnimating;
+    int numDigitsToDraw;
 }
 
 - (void) add:(float)incr;
@@ -30,7 +31,12 @@
 @end
 
 
+
 @interface FlipCounterViewDigitSprite : NSObject
+{
+    @private
+    int currentFrame;
+}
 
 - (id)initWithOldValue:(NSUInteger)o
               newValue:(NSUInteger)n
@@ -43,5 +49,10 @@
 @property (readwrite,nonatomic,assign) NSUInteger newValue;
 
 - (float) incr:(float)inc;
+
+- (BOOL) nextFrame:(int)from
+                to:(int)to
+      numTopFrames:(int)numTopFrames
+   numBottomFrames:(int)numBottomFrames;
 
 @end
