@@ -13,7 +13,6 @@
 #define FCV_BOTTOMFRAME_HEIGHT 64
 #define FCV_BOTTOM_START_ROW 10
 
-
 @interface FlipCounterView(Private)
 
 - (void) loadImagePool;
@@ -21,6 +20,32 @@
 - (void) animate;
 
 @end
+
+
+
+
+@implementation FlipCounterViewDigitIndex
+
+@synthesize oldValue=_oldValue;
+@synthesize newValue=_newValue;
+@synthesize topIndex=_topIndex;
+@synthesize bottomIndex=_bottomIndex;
+
+- (id)initWithOldValue:(NSUInteger)o newValue:(NSUInteger)n frameTop:(NSUInteger)ft frameBottom:(NSUInteger)fb
+{
+    self = [super init];
+    if (self) {
+        _oldValue = o;
+        _newValue = n;
+        _topIndex = ft;
+        _bottomIndex = fb;
+    }
+    return self;
+}
+
+@end
+
+
 
 
 @implementation FlipCounterView
@@ -32,12 +57,19 @@
         [self setBackgroundColor:[UIColor clearColor]];
         [self loadImagePool];
         
-        digitIndex.oldValue = 0;
-        digitIndex.newValue = 0;
-        digitIndex.currentFrame.topIndex = 0;
-        digitIndex.currentFrame.bottomIndex = 0;
+        digits = [[NSMutableArray alloc] initWithCapacity:10];
+        FlipCounterViewDigitIndex* digitIndex = [[[FlipCounterViewDigitIndex alloc] initWithOldValue:0 newValue:0 frameTop:0 frameBottom:0] autorelease];
+        [digits addObject:digitIndex];
     }
     return self;
+}
+
+- (void)dealloc {
+    [topFrames release];
+    [bottomFrames release];
+    [digits release];
+    
+    [super dealloc];
 }
 
 - (void) loadImagePool
@@ -95,11 +127,11 @@
 // An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect
 {
-    FlipCounterViewDigitFrame digitFrame = digitIndex.currentFrame;
-    UIImage* t = [topFrames objectAtIndex:digitFrame.topIndex];
+    FlipCounterViewDigitIndex* digitIndex = [digits objectAtIndex:0];
+    UIImage* t = [topFrames objectAtIndex:digitIndex.topIndex];
     [t drawAtPoint:CGPointZero];
     
-    UIImage* b = [bottomFrames objectAtIndex:digitFrame.bottomIndex];
+    UIImage* b = [bottomFrames objectAtIndex:digitIndex.bottomIndex];
     [b drawAtPoint:CGPointMake(0, FCV_TOPFRAME_HEIGHT)];
 }
 
@@ -110,6 +142,8 @@
 
 - (void) add:(NSUInteger)incr
 {
+    FlipCounterViewDigitIndex* digitIndex = [digits objectAtIndex:0];
+
     digitIndex.newValue += incr;
     while (digitIndex.newValue > 9) {
         double integral = 0;
@@ -118,18 +152,21 @@
         NSAssert(fractional < INT_MAX, @"fractional overflow");
         [self carry:integral];
         digitIndex.newValue = fractional;
+        [digits replaceObjectAtIndex:0 withObject:digitIndex];
     }
     
     [self animate];
 }
 
-- (void)animate
+- (void) animate
 {
     if (isAnimating) {
         return;
     }
     
     isAnimating = YES;
+    
+    FlipCounterViewDigitIndex* digitIndex = [digits objectAtIndex:0];
     int from = digitIndex.oldValue;
     int to = digitIndex.newValue;
     
@@ -138,28 +175,28 @@
     // top pattern: old 1, old 2, new 0
     // bottom pattern: old 1, new 2, new 3, new 0
     
-    digitIndex.currentFrame.topIndex = (from * numTopFrames) + 1;
+    digitIndex.topIndex = (from * numTopFrames) + 1;
     [self setNeedsDisplay];
     [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:frameRate]];
     
-    digitIndex.currentFrame.topIndex = (from * numTopFrames) + 2;
+    digitIndex.topIndex = (from * numTopFrames) + 2;
     [self setNeedsDisplay];
     [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:frameRate]];
     
-    digitIndex.currentFrame.topIndex = (to * numTopFrames) + 0;
-    digitIndex.currentFrame.bottomIndex = (from * numBottomFrames) + 1;
+    digitIndex.topIndex = (to * numTopFrames) + 0;
+    digitIndex.bottomIndex = (from * numBottomFrames) + 1;
     [self setNeedsDisplay];
     [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:frameRate]];
     
-    digitIndex.currentFrame.bottomIndex = (to * numBottomFrames) + 2;
+    digitIndex.bottomIndex = (to * numBottomFrames) + 2;
     [self setNeedsDisplay];
     [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:frameRate]];
     
-    digitIndex.currentFrame.bottomIndex = (to * numBottomFrames) + 3;
+    digitIndex.bottomIndex = (to * numBottomFrames) + 3;
     [self setNeedsDisplay];
     [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:frameRate]];
     
-    digitIndex.currentFrame.bottomIndex = (to * numBottomFrames) + 0;
+    digitIndex.bottomIndex = (to * numBottomFrames) + 0;
     [self setNeedsDisplay];
     
     digitIndex.oldValue = to;

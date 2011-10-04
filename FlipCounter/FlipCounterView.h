@@ -8,16 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-typedef struct FlipCounterViewDigitFrame {
-    NSUInteger topIndex;
-    NSUInteger bottomIndex;
-} FlipCounterViewDigitFrame;
+@class FlipCounterViewDigitIndex;
 
-typedef struct FlipCounterViewDigitIndex {
-    NSUInteger oldValue;
-    NSUInteger newValue;
-    FlipCounterViewDigitFrame currentFrame;
-} FlipCounterViewDigitIndex;
+
 
 @interface FlipCounterView : UIView
 {
@@ -27,11 +20,27 @@ typedef struct FlipCounterViewDigitIndex {
     int numTopFrames;
     int numBottomFrames;
     
-    FlipCounterViewDigitIndex digitIndex;
+    NSMutableArray* digits;
     
     BOOL isAnimating;
 }
 
 - (void) add:(NSUInteger)incr;
+
+@end
+
+
+
+@interface FlipCounterViewDigitIndex : NSObject
+
+- (id)initWithOldValue:(NSUInteger)o
+              newValue:(NSUInteger)n
+              frameTop:(NSUInteger)ft
+           frameBottom:(NSUInteger)fb;
+
+@property (readwrite,nonatomic,assign) NSUInteger topIndex;
+@property (readwrite,nonatomic,assign) NSUInteger bottomIndex;
+@property (readwrite,nonatomic,assign) NSUInteger oldValue;
+@property (readwrite,nonatomic,assign) NSUInteger newValue;
 
 @end
