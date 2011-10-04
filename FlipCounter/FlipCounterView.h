@@ -25,10 +25,9 @@
     BOOL isAnimating;
 }
 
-- (void) add:(NSUInteger)incr;
+- (void) add:(float)incr;
 
 @end
-
 
 
 @interface FlipCounterViewDigitIndex : NSObject

@@ -16,13 +16,10 @@
 @interface FlipCounterView(Private)
 
 - (void) loadImagePool;
-- (void) carry:(NSUInteger)overage;
+- (void) carry:(float)overage base:(int)base;
 - (void) animate;
 
 @end
-
-
-
 
 @implementation FlipCounterViewDigitIndex
 
@@ -41,6 +38,29 @@
         _bottomIndex = fb;
     }
     return self;
+}
+
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"(o:%d n:%d t:%d b:%d)", _oldValue, _newValue, _topIndex, _bottomIndex];
+}
+
+- (float) incr:(float)inc
+{
+    float i1 = 0;
+    float f1 = modff(inc/10., &i1);
+    
+    float overhang = i1;
+    float v = _newValue + floorf(f1 * 10.);
+    if (v > 9) {
+        float i2 = 0;
+        float f2 = modff(v, &i2);
+        overhang += i2;
+        v = floorf(f2 * 10.);
+    }
+    
+    _newValue = v;
+    return overhang;
 }
 
 @end
@@ -135,24 +155,36 @@
     [b drawAtPoint:CGPointMake(0, FCV_TOPFRAME_HEIGHT)];
 }
 
-- (void) carry:(NSUInteger)overage
+- (void) carry:(float)overhang base:(int)base
 {
+    FlipCounterViewDigitIndex* digitIndex = nil;
     
+    if ([digits count] <= base) {
+        digitIndex = [digits objectAtIndex:base];
+    } else {
+        digitIndex = [[FlipCounterViewDigitIndex alloc] initWithOldValue:0
+                                                                newValue:0
+                                                                frameTop:0
+                                                             frameBottom:0];
+        [digits addObject:digitIndex];
+        [digitIndex release];
+    }
+    
+    float o = [digitIndex incr:overhang];
+    
+    if (o != 0) {
+        [self carry:o base:base+1];
+    }
 }
 
-- (void) add:(NSUInteger)incr
+- (void) add:(float)i
 {
     FlipCounterViewDigitIndex* digitIndex = [digits objectAtIndex:0];
-
-    digitIndex.newValue += incr;
-    while (digitIndex.newValue > 9) {
-        double integral = 0;
-        double fractional = modf(incr, &integral);
-        NSAssert(integral < INT_MAX, @"integral overflow");
-        NSAssert(fractional < INT_MAX, @"fractional overflow");
-        [self carry:integral];
-        digitIndex.newValue = fractional;
-        [digits replaceObjectAtIndex:0 withObject:digitIndex];
+    
+    float overhang = [digitIndex incr:i];
+    
+    if (overhang != 0) {
+        [self carry:overhang base:0];
     }
     
     [self animate];
