@@ -178,13 +178,13 @@
         
         sprite.oldValue = to;
     }
-    
+    [sprites release];
     isAnimating = NO;
+    
     while (changedWhileAnimating) {
         changedWhileAnimating = NO;
         [self animate];
     }
-    [sprites release];
 }
 
 @end
