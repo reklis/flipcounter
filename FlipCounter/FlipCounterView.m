@@ -18,6 +18,8 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
+        [self setBackgroundColor:[UIColor clearColor]];
+        
         UIImage* sprite = [UIImage imageNamed:@"digits.png"];
         CGImageRef spriteRef = [sprite CGImage];
         
