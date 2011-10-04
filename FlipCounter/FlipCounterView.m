@@ -105,7 +105,7 @@
     for (int i=numDigitsToDraw-1; i!=-1; --i) {
         FlipCounterViewDigitSprite* sprite = [digits objectAtIndex:i];
         
-        CGFloat x = FCV_FRAME_WIDTH * (numDigitsToDraw - i);
+        CGFloat x = (FCV_FRAME_WIDTH * (numDigitsToDraw - i)) - FCV_FRAME_WIDTH;
         
         UIImage* t = [topFrames objectAtIndex:sprite.topIndex];
         [t drawAtPoint:CGPointMake(x, 0)];
@@ -159,26 +159,33 @@
     
     isAnimating = YES;
     numDigitsToDraw = [digits count];
+    NSArray* sprites = [digits copy];
     
-    FlipCounterViewDigitSprite* sprite = [digits objectAtIndex:0];
-    int from = sprite.oldValue;
-    int to = sprite.newValue;
-    
-    NSTimeInterval frameRate = .05;
-
-    BOOL spriteAnimationComplete = FALSE;
-    while (!spriteAnimationComplete) {
-        spriteAnimationComplete = [sprite nextFrame:from to:to numTopFrames:numTopFrames numBottomFrames:numBottomFrames];
-        [self setNeedsDisplay];
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:frameRate]];
+    for (FlipCounterViewDigitSprite* sprite in sprites) {
+        int from = sprite.oldValue;
+        int to = sprite.newValue;
+        if (from == to) continue; // skip sprites that have not changed
+        
+        NSTimeInterval frameRate = .05;
+        BOOL spriteAnimationComplete = FALSE;
+        while (!spriteAnimationComplete) {
+            spriteAnimationComplete = [sprite nextFrame:from
+                                                     to:to
+                                           numTopFrames:numTopFrames
+                                        numBottomFrames:numBottomFrames];
+            [self setNeedsDisplay];
+            NSDate* nextFrameTime = [NSDate dateWithTimeIntervalSinceNow:frameRate];
+            [[NSRunLoop currentRunLoop] runUntilDate:nextFrameTime];
+        }
+        
+        sprite.oldValue = to;
+        
+        if (sprite.newValue != to) {
+            [self animate];
+        }
     }
     
-    sprite.oldValue = to;
     isAnimating = NO;
-    
-    if (sprite.newValue != to) {
-        [self animate];
-    }
 }
 
 @end
