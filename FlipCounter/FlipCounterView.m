@@ -21,53 +21,6 @@
 
 @end
 
-@implementation FlipCounterViewDigitIndex
-
-@synthesize oldValue=_oldValue;
-@synthesize newValue=_newValue;
-@synthesize topIndex=_topIndex;
-@synthesize bottomIndex=_bottomIndex;
-
-- (id)initWithOldValue:(NSUInteger)o newValue:(NSUInteger)n frameTop:(NSUInteger)ft frameBottom:(NSUInteger)fb
-{
-    self = [super init];
-    if (self) {
-        _oldValue = o;
-        _newValue = n;
-        _topIndex = ft;
-        _bottomIndex = fb;
-    }
-    return self;
-}
-
-- (NSString *)description
-{
-    return [NSString stringWithFormat:@"(o:%d n:%d t:%d b:%d)", _oldValue, _newValue, _topIndex, _bottomIndex];
-}
-
-- (float) incr:(float)inc
-{
-    float i1 = 0;
-    float f1 = modff(inc/10., &i1);
-    
-    float overhang = i1;
-    float v = _newValue + floorf(f1 * 10.);
-    if (v > 9) {
-        float i2 = 0;
-        float f2 = modff(v, &i2);
-        overhang += i2;
-        v = floorf(f2 * 10.);
-    }
-    
-    _newValue = v;
-    return overhang;
-}
-
-@end
-
-
-
-
 @implementation FlipCounterView
 
 - (id)initWithFrame:(CGRect)frame
@@ -78,8 +31,8 @@
         [self loadImagePool];
         
         digits = [[NSMutableArray alloc] initWithCapacity:10];
-        FlipCounterViewDigitIndex* digitIndex = [[[FlipCounterViewDigitIndex alloc] initWithOldValue:0 newValue:0 frameTop:0 frameBottom:0] autorelease];
-        [digits addObject:digitIndex];
+        FlipCounterViewDigitSprite* sprite = [[[FlipCounterViewDigitSprite alloc] initWithOldValue:0 newValue:0 frameTop:0 frameBottom:0] autorelease];
+        [digits addObject:sprite];
     }
     return self;
 }
@@ -147,7 +100,7 @@
 // An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect
 {
-    FlipCounterViewDigitIndex* digitIndex = [digits objectAtIndex:0];
+    FlipCounterViewDigitSprite* digitIndex = [digits objectAtIndex:0];
     UIImage* t = [topFrames objectAtIndex:digitIndex.topIndex];
     [t drawAtPoint:CGPointZero];
     
@@ -157,20 +110,20 @@
 
 - (void) carry:(float)overhang base:(int)base
 {
-    FlipCounterViewDigitIndex* digitIndex = nil;
+    FlipCounterViewDigitSprite* sprite = nil;
     
     if ([digits count] <= base) {
-        digitIndex = [digits objectAtIndex:base];
+        sprite = [digits objectAtIndex:base];
     } else {
-        digitIndex = [[FlipCounterViewDigitIndex alloc] initWithOldValue:0
-                                                                newValue:0
-                                                                frameTop:0
-                                                             frameBottom:0];
-        [digits addObject:digitIndex];
-        [digitIndex release];
+        sprite = [[FlipCounterViewDigitSprite alloc] initWithOldValue:0
+                                                             newValue:0
+                                                             frameTop:0
+                                                          frameBottom:0];
+        [digits addObject:sprite];
+        [sprite release];
     }
     
-    float o = [digitIndex incr:overhang];
+    float o = [sprite incr:overhang];
     
     if (o != 0) {
         [self carry:o base:base+1];
@@ -179,7 +132,7 @@
 
 - (void) add:(float)i
 {
-    FlipCounterViewDigitIndex* digitIndex = [digits objectAtIndex:0];
+    FlipCounterViewDigitSprite* digitIndex = [digits objectAtIndex:0];
     
     float overhang = [digitIndex incr:i];
     
@@ -198,47 +151,92 @@
     
     isAnimating = YES;
     
-    FlipCounterViewDigitIndex* digitIndex = [digits objectAtIndex:0];
-    int from = digitIndex.oldValue;
-    int to = digitIndex.newValue;
+    FlipCounterViewDigitSprite* sprite = [digits objectAtIndex:0];
+    int from = sprite.oldValue;
+    int to = sprite.newValue;
     
     NSTimeInterval frameRate = .05;
 
     // top pattern: old 1, old 2, new 0
     // bottom pattern: old 1, new 2, new 3, new 0
     
-    digitIndex.topIndex = (from * numTopFrames) + 1;
+    sprite.topIndex = (from * numTopFrames) + 1;
     [self setNeedsDisplay];
     [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:frameRate]];
     
-    digitIndex.topIndex = (from * numTopFrames) + 2;
+    sprite.topIndex = (from * numTopFrames) + 2;
     [self setNeedsDisplay];
     [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:frameRate]];
     
-    digitIndex.topIndex = (to * numTopFrames) + 0;
-    digitIndex.bottomIndex = (from * numBottomFrames) + 1;
+    sprite.topIndex = (to * numTopFrames) + 0;
+    sprite.bottomIndex = (from * numBottomFrames) + 1;
     [self setNeedsDisplay];
     [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:frameRate]];
     
-    digitIndex.bottomIndex = (to * numBottomFrames) + 2;
+    sprite.bottomIndex = (to * numBottomFrames) + 2;
     [self setNeedsDisplay];
     [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:frameRate]];
     
-    digitIndex.bottomIndex = (to * numBottomFrames) + 3;
+    sprite.bottomIndex = (to * numBottomFrames) + 3;
     [self setNeedsDisplay];
     [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:frameRate]];
     
-    digitIndex.bottomIndex = (to * numBottomFrames) + 0;
+    sprite.bottomIndex = (to * numBottomFrames) + 0;
     [self setNeedsDisplay];
     
-    digitIndex.oldValue = to;
+    sprite.oldValue = to;
     isAnimating = NO;
     
-    if (digitIndex.newValue != to) {
+    if (sprite.newValue != to) {
         [self animate];
     }
 }
 
+@end
 
+
+
+
+@implementation FlipCounterViewDigitSprite
+
+@synthesize oldValue=_oldValue;
+@synthesize newValue=_newValue;
+@synthesize topIndex=_topIndex;
+@synthesize bottomIndex=_bottomIndex;
+
+- (id)initWithOldValue:(NSUInteger)o newValue:(NSUInteger)n frameTop:(NSUInteger)ft frameBottom:(NSUInteger)fb
+{
+    self = [super init];
+    if (self) {
+        _oldValue = o;
+        _newValue = n;
+        _topIndex = ft;
+        _bottomIndex = fb;
+    }
+    return self;
+}
+
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"(o:%d n:%d t:%d b:%d)", _oldValue, _newValue, _topIndex, _bottomIndex];
+}
+
+- (float) incr:(float)inc
+{
+    float i1 = 0;
+    float f1 = modff(inc/10., &i1);
+    
+    float overhang = i1;
+    float v = _newValue + floorf(f1 * 10.);
+    if (v > 9) {
+        float i2 = 0;
+        float f2 = modff(v, &i2);
+        overhang += i2;
+        v = floorf(f2 * 10.);
+    }
+    
+    _newValue = v;
+    return overhang;
+}
 
 @end

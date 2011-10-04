@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@class FlipCounterViewDigitIndex;
+@class FlipCounterViewDigitSprite;
 
 
 
@@ -30,7 +30,7 @@
 @end
 
 
-@interface FlipCounterViewDigitIndex : NSObject
+@interface FlipCounterViewDigitSprite : NSObject
 
 - (id)initWithOldValue:(NSUInteger)o
               newValue:(NSUInteger)n
@@ -41,5 +41,7 @@
 @property (readwrite,nonatomic,assign) NSUInteger bottomIndex;
 @property (readwrite,nonatomic,assign) NSUInteger oldValue;
 @property (readwrite,nonatomic,assign) NSUInteger newValue;
+
+- (float) incr:(float)inc;
 
 @end
