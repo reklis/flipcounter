@@ -6,8 +6,7 @@
 #import <UIKit/UIKit.h>
 
 @class FlipCounterViewDigitSprite;
-
-
+@protocol FlipCounterViewDelegate;
 
 @interface FlipCounterView : UIView
 {
@@ -22,11 +21,16 @@
     BOOL changedWhileAnimating;
     BOOL isAnimating;
     int numDigitsToDraw;
+    int lastNumDigitsToDraw;
     
     int rawCounterValue;
 }
 
-- (void) add:(int)incr;
+@property (readwrite,nonatomic,assign) id<FlipCounterViewDelegate> delegate;
+
+- (void) add:(int)amount;
+- (void) distributedAdd:(int)amount overSeconds:(NSTimeInterval)seconds withNumberOfIterations:(int)numIterations;
+- (int) counterValue;
 
 @end
 
@@ -54,5 +58,14 @@
                 to:(int)to
       numTopFrames:(int)numTopFrames
    numBottomFrames:(int)numBottomFrames;
+
+@end
+
+
+@protocol FlipCounterViewDelegate <NSObject>
+
+@optional
+
+- (void) flipCounterView:(FlipCounterView*)flipCounterView didExpand:(CGSize)newSize;
 
 @end

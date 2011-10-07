@@ -8,6 +8,7 @@
 #define FCV_FRAME_WIDTH 53
 #define FCV_TOPFRAME_HEIGHT 39
 #define FCV_BOTTOMFRAME_HEIGHT 64
+#define FCV_FRAMERATE .05
 #define FCV_BOTTOM_START_ROW 10
 
 @interface FlipCounterView(Private)
@@ -20,14 +21,18 @@
 
 @implementation FlipCounterView
 
+@synthesize delegate;
+
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
+        [self setAccessibilityTraits:UIAccessibilityTraitUpdatesFrequently];
         [self setBackgroundColor:[UIColor clearColor]];
         [self loadImagePool];
         
         rawCounterValue = 0;
+        lastNumDigitsToDraw = 0;
         
         digits = [[NSMutableArray alloc] initWithCapacity:10];
         FlipCounterViewDigitSprite* sprite = [[[FlipCounterViewDigitSprite alloc] initWithOldValue:0 newValue:0 frameTop:0 frameBottom:0] autorelease];
@@ -97,10 +102,16 @@
     }
 }
 
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect
 {
+    if (numDigitsToDraw != lastNumDigitsToDraw) {
+        if ([self.delegate respondsToSelector:@selector(flipCounterView:didExpand:)]) {
+            CGSize s = CGSizeMake(FCV_FRAME_WIDTH*numDigitsToDraw, FCV_TOPFRAME_HEIGHT+FCV_BOTTOMFRAME_HEIGHT);
+            [self.delegate flipCounterView:self didExpand:s];
+        }
+        lastNumDigitsToDraw = numDigitsToDraw;
+    }
+    
     for (int i=numDigitsToDraw-1; i!=-1; --i) {
         FlipCounterViewDigitSprite* sprite = [digits objectAtIndex:i];
         
@@ -112,6 +123,11 @@
         UIImage* b = [bottomFrames objectAtIndex:sprite.bottomIndex];
         [b drawAtPoint:CGPointMake(x, FCV_TOPFRAME_HEIGHT)];
     }
+}
+
+- (int)counterValue
+{
+    return rawCounterValue;
 }
 
 - (void) carry:(int)overhang base:(int)base
@@ -137,31 +153,45 @@
     }
 }
 
-- (void) add:(int)i
+- (void) add:(int)amount
 {
-//    int oldRawCounterValue = rawCounterValue;
-    
-    rawCounterValue += i;
-    
+    //    int oldRawCounterValue = rawCounterValue;
+
     FlipCounterViewDigitSprite* digitIndex = [digits objectAtIndex:0];
     
-    int overhang = [digitIndex incr:i];
+    int overhang = [digitIndex incr:amount];
     
     if (overhang != 0) {
         [self carry:overhang base:0];
     }
     
-//    int testValue = 0;
-//    for (int i=0; i!=[digits count]; ++i) {
-//        FlipCounterViewDigitSprite* sprite = [digits objectAtIndex:i];
-//        testValue += sprite.newValue * powf(10, i);
-//    }
-//    
-//    NSLog(@"((%d+%d) = %d) == %d ?", oldRawCounterValue, i, rawCounterValue, testValue);
-//    
-//    NSAssert(testValue == rawCounterValue, @"math error");
-    
     [self animate];
+    
+    //    int testValue = 0;
+    //    for (int i=0; i!=[digits count]; ++i) {
+    //        FlipCounterViewDigitSprite* sprite = [digits objectAtIndex:i];
+    //        testValue += sprite.newValue * powf(10, i);
+    //    }
+    //    
+    //    NSLog(@"((%d+%d) = %d) == %d ?", oldRawCounterValue, amount, rawCounterValue, testValue);
+    //    
+    //    NSAssert(testValue == rawCounterValue, @"math error");
+}
+
+- (void) distributedAdd:(int)amount overSeconds:(NSTimeInterval)seconds withNumberOfIterations:(int)numIterations
+{
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        rawCounterValue += amount;
+        
+        // spread out the adds smoothly over time
+        
+        int partialAmount = amount / numIterations;
+        int leftOver = amount % numIterations;
+        
+        for (int i=0; i!=numIterations; ++i) {
+            [self add:((i == 0) ? leftOver : partialAmount)];
+        }
+    });
 }
 
 - (void) animate
@@ -172,28 +202,50 @@
     }
     
     isAnimating = YES;
+    
+//        j=0     j=1     j=2     j=3
+//    i=0 frame 1 -       -       -         s=0
+//    i=1 frame 2 frame 1 -       -         s=0
+//    i=2 frame 3 frame 2 frame 1 -         s=0
+//    i=3 frame 4 frame 3 frame 2 frame 1   s=0
+//    i=4 frame 5 frame 4 frame 3 frame 2   s=0
+//    i=5 frame 6 frame 5 frame 4 frame 3   s=0
+//    i=6 -       frame 6 frame 5 frame 4   s=1
+//    i=7 -       -       frame 6 frame 5   s=2
+//    i=8 -       -       -       frame 6   s=3
+//    
+//    total time: (9 * .05) seconds == .45 seconds
+    
     numDigitsToDraw = [digits count];
     NSArray* sprites = [digits copy];
-    NSTimeInterval frameRate = .05;
-
-    for (FlipCounterViewDigitSprite* sprite in sprites) {
-        int from = sprite.oldValue;
-        int to = sprite.newValue;
-        if (from == to) continue; // skip sprites that have not changed
-        
-        BOOL spriteAnimationComplete = FALSE;
-        while (!spriteAnimationComplete) {
-            spriteAnimationComplete = [sprite nextFrame:from
-                                                     to:to
-                                           numTopFrames:numTopFrames
-                                        numBottomFrames:numBottomFrames];
-            [self setNeedsDisplay];
-            NSDate* nextFrameTime = [NSDate dateWithTimeIntervalSinceNow:frameRate];
-            [[NSRunLoop currentRunLoop] runUntilDate:nextFrameTime];
+    NSTimeInterval frameRate = FCV_FRAMERATE;
+    int numAnimationFrames = 6 + numDigitsToDraw-1;
+    
+    int s=0;
+    for (int i=0; i!=numAnimationFrames; ++i) {
+        for (int j=s; ((j != (i+1)) && (j != numDigitsToDraw) ); ++j) {
+            FlipCounterViewDigitSprite* sprite = [sprites objectAtIndex:j];
+            
+            int from = sprite.oldValue;
+            int to = sprite.newValue;
+            if (from == to) continue; // skip sprites that have not changed
+            
+            BOOL complete = [sprite nextFrame:from
+                                           to:to
+                                 numTopFrames:numTopFrames
+                              numBottomFrames:numBottomFrames];
+            
+            if (complete) {
+                sprite.oldValue = to;
+                ++s;
+            }
         }
         
-        sprite.oldValue = to;
+        [self setNeedsDisplay];
+        NSDate* nextFrameTime = [NSDate dateWithTimeIntervalSinceNow:frameRate];
+        [[NSRunLoop currentRunLoop] runUntilDate:nextFrameTime];
     }
+    
     [sprites release];
     isAnimating = NO;
     
