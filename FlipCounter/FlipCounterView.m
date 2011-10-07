@@ -155,27 +155,20 @@
 
 - (void) add:(int)amount
 {
-    //    int oldRawCounterValue = rawCounterValue;
-
-    FlipCounterViewDigitSprite* digitIndex = [digits objectAtIndex:0];
-    
-    int overhang = [digitIndex incr:amount];
-    
-    if (overhang != 0) {
-        [self carry:overhang base:0];
+    if (isAnimating) {
+        addQueue += amount;
+    } else {
+        
+        FlipCounterViewDigitSprite* digitIndex = [digits objectAtIndex:0];
+        
+        int overhang = [digitIndex incr:amount];
+        
+        if (overhang != 0) {
+            [self carry:overhang base:0];
+        }
+        
+        [self animate];
     }
-    
-    [self animate];
-    
-    //    int testValue = 0;
-    //    for (int i=0; i!=[digits count]; ++i) {
-    //        FlipCounterViewDigitSprite* sprite = [digits objectAtIndex:i];
-    //        testValue += sprite.newValue * powf(10, i);
-    //    }
-    //    
-    //    NSLog(@"((%d+%d) = %d) == %d ?", oldRawCounterValue, amount, rawCounterValue, testValue);
-    //    
-    //    NSAssert(testValue == rawCounterValue, @"math error");
 }
 
 - (void) distributedAdd:(int)amount overSeconds:(NSTimeInterval)seconds withNumberOfIterations:(int)numIterations
@@ -197,7 +190,6 @@
 - (void) animate
 {
     if (isAnimating) {
-        changedWhileAnimating = YES;
         return;
     }
     
@@ -249,9 +241,10 @@
     [sprites release];
     isAnimating = NO;
     
-    while (changedWhileAnimating) {
-        changedWhileAnimating = NO;
-        [self animate];
+    if (0 != addQueue) {
+        int q = addQueue;
+        addQueue = 0;
+        [self add:q];
     }
     [self setNeedsDisplay];
 }

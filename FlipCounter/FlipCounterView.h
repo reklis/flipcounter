@@ -18,12 +18,12 @@
     
     NSMutableArray* digits;
     
-    BOOL changedWhileAnimating;
     BOOL isAnimating;
     int numDigitsToDraw;
     int lastNumDigitsToDraw;
     
     int rawCounterValue;
+    int addQueue;
 }
 
 @property (readwrite,nonatomic,assign) id<FlipCounterViewDelegate> delegate;
