@@ -155,9 +155,18 @@
 
 - (void) add:(int)amount
 {
+    if (amount == 0) {
+        return;
+    }
+    
+    if ((rawCounterValue + amount) < 0) {
+        return;
+    }
+    
     if (isAnimating) {
         addQueue += amount;
     } else {
+        rawCounterValue += amount;
         
         FlipCounterViewDigitSprite* digitIndex = [digits objectAtIndex:0];
         
@@ -171,10 +180,14 @@
     }
 }
 
+- (void)subtract:(int)amount
+{
+    [self add:-amount];
+}
+
 - (void) distributedAdd:(int)amount overSeconds:(NSTimeInterval)seconds withNumberOfIterations:(int)numIterations
 {
     dispatch_async(dispatch_get_main_queue(), ^(void) {
-        rawCounterValue += amount;
         
         // spread out the adds smoothly over time
         
@@ -287,6 +300,9 @@
     if (v > 9) {
         overhang += v / 10;
         v %= 10;
+    } else if (v < 0) {
+        v += 10;
+        --overhang;
     }
     
     _newValue = v;

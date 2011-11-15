@@ -26,6 +26,7 @@
     [super viewDidLoad];
     
     flipCounter = [[FlipCounterView alloc] initWithFrame:self.view.frame];
+    [flipCounter add:10];
     [self.view addSubview:flipCounter];
     [flipCounter release];
 }
@@ -45,12 +46,20 @@
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    [flipCounter add:[touches count]];
+    UITouch* t = [touches anyObject];
+    CGRect f = [self.view frame];
+    CGFloat midY = CGRectGetMidY(f);
+    CGPoint loc = [t locationInView:self.view];
+    if (midY > loc.y) {
+        [flipCounter add:[touches count]];
+    } else {
+        [flipCounter add:-[touches count]];
+    }
 }
 
 - (void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    [flipCounter add:[touches count]];
+    //[flipCounter add:[touches count]];
 }
 
 @end

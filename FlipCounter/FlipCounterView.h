@@ -29,6 +29,8 @@
 @property (readwrite,nonatomic,assign) id<FlipCounterViewDelegate> delegate;
 
 - (void) add:(int)amount;
+- (void) subtract:(int)amount;
+
 - (void) distributedAdd:(int)amount overSeconds:(NSTimeInterval)seconds withNumberOfIterations:(int)numIterations;
 - (int) counterValue;
 
