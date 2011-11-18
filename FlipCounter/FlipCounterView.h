@@ -26,6 +26,8 @@
     int addQueue;
 }
 
++ (CGSize) sizeForNumberOfDigits:(int)digitCount;
+
 @property (readwrite,nonatomic,assign) id<FlipCounterViewDelegate> delegate;
 
 - (void) add:(int)amount;

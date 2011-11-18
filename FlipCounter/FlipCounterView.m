@@ -21,6 +21,13 @@
 
 @implementation FlipCounterView
 
++ (CGSize) sizeForNumberOfDigits:(int)digitCount
+{
+    CGFloat w = digitCount * FCV_FRAME_WIDTH;
+    CGFloat h = FCV_TOPFRAME_HEIGHT + FCV_BOTTOMFRAME_HEIGHT;
+    return CGSizeMake(w, h);
+}
+
 @synthesize delegate;
 
 - (id)initWithFrame:(CGRect)frame
