@@ -9,3 +9,7 @@ This is a complete re-write.  Add and Subtract work.  Currently uses image draw 
 ## License
 
 MIT
+
+---
+
+[![gittip](http://img.shields.io/gittip/reklis.svg)](https://www.gittip.com/reklis/)
